@@ -1,0 +1,10 @@
+RewriteEngine On
+# la siguiente linea la comento para el docker
+# RewriteBase /spa-ibaiondo/
+
+# Si el archivo o directorio existe, úsalo directamente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# De lo contrario, redirige a index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

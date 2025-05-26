@@ -1,0 +1,173 @@
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding-right: 0 !important;
+}
+
+/* Colores personalizados */
+:root {
+    /* --primary-color: #4e7a9e; */
+    --primary-color: #189AB4;
+    --secondary-color: #6c757d;
+    --accent-color: #e9ecef;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+.fixed-navbar-body {
+    padding-top: 3.5rem !important;
+}
+
+/* Personalización de Bootstrap */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #3d6280;
+    border-color: #3d6280;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+/* Hero section */
+.hero-section {
+    padding: 5rem 0;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Footer */
+footer {
+    background-color: #05445E   ;
+    color: white;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #f8f9fa;
+    text-decoration: underline;
+}
+
+.social-icons a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.social-icons a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+.modal-backdrop {
+    display: none !important;
+}
+
+/* Responsive imagen detalle servicio */
+.img-detalle-servicio {
+    width: 100%;
+    height: 20vw;           /* Altura relativa al ancho de la pantalla */
+    max-height: 500px;      /* Máximo en pantallas grandes */
+    min-height: 250px;      /* Mínimo en móviles */
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+/* Posicionamiento de modales para la sección de administración */
+.fixed-modal {
+    margin-top: 4rem !important; /* Ajustado para que aparezca debajo del navbar fijo */
+    margin-bottom: 0;
+    padding-right: 0 !important; /* Evita el desplazamiento lateral */
+}
+
+.fixed-modal .modal-dialog {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    max-height: calc(100vh - 6rem); /* Altura máxima considerando el navbar */
+    overflow-y: auto; /* Permite scroll dentro del modal si el contenido es muy largo */
+}
+
+/* Asegura que el modal quede por encima de otros elementos pero debajo del navbar */
+.fixed-modal {
+    z-index: 1040 !important; /* Navbar suele tener z-index: 1030 en Bootstrap */
+}
+
+/* Estilos para desplegables en tablas */
+.collapse-row {
+    background-color: #f8f9fa;
+}
+
+.collapse-row .card {
+    border-radius: 0;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: none;
+    transform: none !important; /* Prevenir que el card se eleve en hover */
+}
+
+.toggle-collapse:focus {
+    box-shadow: none;
+}
+
+/* Animación suave para los desplegables */
+.collapse {
+    transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+
+    .card-img-top {
+        height: 180px;
+    }
+
+    .fixed-navbar-body {
+        padding-top: 3.5rem !important; /* Un poco más para móviles por si el navbar colapsa */
+    }
+}
+
+/* Add to your styles.css file */
+html {
+  overflow-y: scroll;
+}

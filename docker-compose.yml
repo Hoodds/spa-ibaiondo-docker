@@ -15,7 +15,7 @@ services:
       - APP_URL=http://localhost:8080
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_DATABASE=spa
+      - DB_DATABASE=spa_docker
       - DB_USERNAME=spauser
       - DB_PASSWORD=spapassword
 
@@ -24,7 +24,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_DATABASE=spa
+      - MYSQL_DATABASE=spa_docker
       - MYSQL_USER=spauser
       - MYSQL_PASSWORD=spapassword
       - MYSQL_ROOT_PASSWORD=root

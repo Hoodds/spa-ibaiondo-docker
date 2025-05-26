@@ -1,6 +1,6 @@
 -- Crear la base de datos
 CREATE DATABASE IF NOT EXISTS spa_docker DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
-USE spa;
+USE spa_docker;
 
 -- Tabla de usuarios (clientes)
 CREATE TABLE usuarios (

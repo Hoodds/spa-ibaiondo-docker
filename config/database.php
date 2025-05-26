@@ -3,7 +3,7 @@
 $config = [
     'host' => getenv('DB_HOST') ?: 'db', // 'db' es el nombre del servicio en docker-compose
     'port' => getenv('DB_PORT') ?: '3306',
-    'database' => getenv('DB_DATABASE') ?: 'spa',
+    'database' => getenv('DB_DATABASE') ?: 'spa_docker',
     'username' => getenv('DB_USERNAME') ?: 'spauser',
     'password' => getenv('DB_PASSWORD') ?: 'spapassword',
     'charset' => 'utf8mb4'

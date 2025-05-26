@@ -37,7 +37,6 @@
                         <?php else: ?>
                             <?php foreach ($trabajadores as $trabajador): ?>
                                 <?php
-                                // Determinar la clase de la etiqueta de rol
                                 switch($trabajador['rol']) {
                                     case 'admin':
                                         $badgeClass = 'bg-danger';
@@ -84,7 +83,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Trabajador -->
                                 <tr class="collapse-row">
                                     <td colspan="5" class="p-0">
                                         <div class="collapse" id="verTrabajador<?= $trabajador['id'] ?>">
@@ -104,7 +102,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Editar Trabajador -->
                                 <tr class="collapse-row">
                                     <td colspan="5" class="p-0">
                                         <div class="collapse" id="editarTrabajador<?= $trabajador['id'] ?>">
@@ -155,7 +152,6 @@
     </div>
 </div>
 
-<!-- Modal Nuevo Trabajador -->
 <div class="modal fade" id="nuevoTrabajadorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

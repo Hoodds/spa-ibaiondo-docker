@@ -15,12 +15,10 @@ class TrabajadorController {
     }
 
     public function login() {
-        // Si ya está autenticado, redirigir al dashboard
         if (Auth::check() && isset($_SESSION['trabajador'])) {
             Helper::redirect('trabajador/dashboard');
         }
 
-        // Procesar el formulario de login
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
@@ -31,17 +29,14 @@ class TrabajadorController {
                 return;
             }
 
-            // Intentar login
             $trabajador = $this->trabajadorModel->login($email, $password);
 
             if ($trabajador) {
-                // Guardar datos del trabajador en la sesión
                 $_SESSION['trabajador'] = true;
                 $_SESSION['trabajador_id'] = $trabajador['id'];
                 $_SESSION['trabajador_nombre'] = $trabajador['nombre'];
                 $_SESSION['trabajador_rol'] = $trabajador['rol'];
 
-                // Si es admin, redirigir al panel de admin
                 if ($trabajador['rol'] === 'admin') {
                     Auth::login($trabajador, true);
                     Helper::redirect('admin');
@@ -55,7 +50,6 @@ class TrabajadorController {
             }
         }
 
-        // Mostrar formulario de login
         ob_start();
         include BASE_PATH . '/app/views/trabajadores/login.php';
         $content = ob_get_clean();
@@ -63,18 +57,14 @@ class TrabajadorController {
     }
 
     public function dashboard() {
-        // Verificar si es trabajador
         $this->checkTrabajador();
 
-        // Obtener datos del trabajador
         $trabajador = $this->trabajadorModel->getById($_SESSION['trabajador_id']);
 
         if ($_SESSION['trabajador_rol'] === 'recepcionista') {
-            // Para recepcionistas, mostrar todas las reservas y valoraciones
             $reservas = $this->reservaModel->getAll();
             $valoraciones = $this->valoracionModel->getAll();
 
-            // Obtener servicios (para estadísticas)
             require_once BASE_PATH . '/app/models/Servicio.php';
             $servicioModel = new Servicio();
             $servicios = $servicioModel->getAll();
@@ -83,7 +73,6 @@ class TrabajadorController {
             include BASE_PATH . '/app/views/trabajadores/dashboard_recepcionista.php';
             $content = ob_get_clean();
         } else {
-            // Para otros trabajadores, mostrar solo sus datos
             $reservas = $this->reservaModel->getByTrabajador($_SESSION['trabajador_id']);
             $valoraciones = $this->valoracionModel->getByTrabajador($_SESSION['trabajador_id']);
 
@@ -96,21 +85,18 @@ class TrabajadorController {
     }
 
     public function misReservas() {
-        // Verificar si es trabajador
         $this->checkTrabajador();
 
         if ($_SESSION['trabajador_rol'] === 'recepcionista') {
-            // Para recepcionistas, mostrar todas las reservas (como admin)
             require_once BASE_PATH . '/app/models/Servicio.php';
-            require_once BASE_PATH . '/app/models/Usuario.php'; // Add this line
+            require_once BASE_PATH . '/app/models/Usuario.php';
             $servicioModel = new Servicio();
-            $usuarioModel = new Usuario(); // Add this line
+            $usuarioModel = new Usuario();
 
             $servicios = $servicioModel->getAll();
             $trabajadores = $this->trabajadorModel->getAll();
-            $usuarios = $usuarioModel->getAll(); // Add this line
+            $usuarios = $usuarioModel->getAll();
 
-            // Aplicar filtros si los hay
             $filtros = [
                 'fecha' => $_GET['filtroFecha'] ?? null,
                 'servicio' => $_GET['filtroServicio'] ?? null,
@@ -119,12 +105,10 @@ class TrabajadorController {
             ];
             $reservas = $this->reservaModel->getFiltered($filtros);
 
-            // Usar la vista de reservas para recepcionistas
             ob_start();
             include BASE_PATH . '/app/views/trabajadores/reservas_recepcionista.php';
             $content = ob_get_clean();
         } else {
-            // Para otros trabajadores, mostrar solo sus reservas
             $reservas = $this->reservaModel->getByTrabajador($_SESSION['trabajador_id']);
 
             ob_start();
@@ -136,18 +120,15 @@ class TrabajadorController {
     }
 
     public function misValoraciones() {
-        // Verificar si es trabajador
         $this->checkTrabajador();
 
         if ($_SESSION['trabajador_rol'] === 'recepcionista') {
-            // Para recepcionistas, mostrar todas las valoraciones
             $valoraciones = $this->valoracionModel->getAll();
 
             ob_start();
             include BASE_PATH . '/app/views/trabajadores/valoraciones_recepcionista.php';
             $content = ob_get_clean();
         } else {
-            // Para otros trabajadores, mostrar solo sus valoraciones
             $valoraciones = $this->valoracionModel->getByTrabajador($_SESSION['trabajador_id']);
 
             ob_start();
@@ -159,16 +140,13 @@ class TrabajadorController {
     }
 
     public function logout() {
-        // Eliminar todas las variables de sesión relacionadas con el trabajador
         unset($_SESSION['trabajador']);
         unset($_SESSION['trabajador_id']);
         unset($_SESSION['trabajador_nombre']);
         unset($_SESSION['trabajador_rol']);
 
-        // Como medida adicional, podemos regenerar el ID de sesión
         session_regenerate_id(true);
 
-        // Redirigir al login
         $_SESSION['success'] = 'Has cerrado sesión correctamente.';
         Helper::redirect('login');
     }
@@ -190,14 +168,12 @@ class TrabajadorController {
             $rol = $_POST['rol'];
             $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_BCRYPT) : null;
 
-            // Validar los datos
             if (empty($id) || empty($nombre) || empty($email) || empty($rol)) {
                 $_SESSION['error'] = 'Todos los campos son obligatorios.';
                 Helper::redirect('/admin/trabajadores');
                 return;
             }
 
-            // Cuando el trabajador edita su perfil
             if (!empty($_POST['password'])) {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             } else {
@@ -205,7 +181,6 @@ class TrabajadorController {
             }
             $this->trabajadorModel->update($id, $nombre, $email, $rol, $password);
 
-            // Actualizar en la base de datos
             $trabajadorModel = new Trabajador();
             $result = $trabajadorModel->update($id, $nombre, $email, $rol, $password);
 
@@ -222,18 +197,14 @@ class TrabajadorController {
     public function completarReserva($id) {
         $this->checkTrabajador();
 
-        // Obtener la reserva
         $reserva = $this->reservaModel->getById($id);
 
-        // Validar que la reserva exista
         if (!$reserva) {
             $_SESSION['error'] = 'Reserva no encontrada.';
             Helper::redirect('trabajador/reservas');
             return;
         }
 
-        // Si es recepcionista, puede confirmar cualquier reserva
-        // Si es otro trabajador, solo las suyas
         if ($_SESSION['trabajador_rol'] !== 'recepcionista' &&
             $reserva['id_trabajador'] != $_SESSION['trabajador_id']) {
             $_SESSION['error'] = 'No tienes permiso para gestionar esta reserva.';
@@ -241,14 +212,12 @@ class TrabajadorController {
             return;
         }
 
-        // Solo permitir completar si está pendiente
         if ($reserva['estado'] !== 'pendiente') {
             $_SESSION['error'] = 'Solo puedes completar reservas pendientes.';
             Helper::redirect('trabajador/reservas');
             return;
         }
 
-        // Actualizar el estado de la reserva a 'confirmada'
         $resultado = $this->reservaModel->actualizarEstado($id, 'confirmada');
 
         if ($resultado) {
@@ -263,18 +232,14 @@ class TrabajadorController {
     public function cancelarReserva($id) {
         $this->checkTrabajador();
 
-        // Obtener la reserva
         $reserva = $this->reservaModel->getById($id);
 
-        // Validar que la reserva exista
         if (!$reserva) {
             $_SESSION['error'] = 'Reserva no encontrada.';
             Helper::redirect('trabajador/reservas');
             return;
         }
 
-        // Si es recepcionista, puede cancelar cualquier reserva
-        // Si es otro trabajador, solo las suyas
         if ($_SESSION['trabajador_rol'] !== 'recepcionista' &&
             $reserva['id_trabajador'] != $_SESSION['trabajador_id']) {
             $_SESSION['error'] = 'No tienes permiso para gestionar esta reserva.';
@@ -282,14 +247,12 @@ class TrabajadorController {
             return;
         }
 
-        // Solo permitir cancelar si está pendiente
         if ($reserva['estado'] !== 'pendiente') {
             $_SESSION['error'] = 'Solo puedes cancelar reservas pendientes.';
             Helper::redirect('trabajador/reservas');
             return;
         }
 
-        // Actualizar el estado de la reserva a 'cancelada'
         $resultado = $this->reservaModel->actualizarEstado($id, 'cancelada');
 
         if ($resultado) {
@@ -302,7 +265,6 @@ class TrabajadorController {
     }
 
     public function editarReserva() {
-        // Verificar permisos - solo recepcionista puede editar
         $this->checkTrabajador();
         if ($_SESSION['trabajador_rol'] !== 'recepcionista') {
             $_SESSION['error'] = 'No tienes permisos para realizar esta acción.';
@@ -319,22 +281,17 @@ class TrabajadorController {
             $idServicio = $_POST['id_servicio'] ?? null;
             $idUsuario = $_POST['id_usuario'] ?? null;
 
-            // Validar los datos
             if (empty($id) || empty($estado) || empty($fecha) || empty($hora) || empty($idTrabajador)) {
                 $_SESSION['error'] = 'Todos los campos son obligatorios.';
                 Helper::redirect('/trabajador/reservas');
                 return;
             }
 
-            // Crear la fecha y hora en formato MySQL
             $fechaHora = $fecha . ' ' . $hora . ':00';
 
-            // Verificar disponibilidad del trabajador en esa fecha/hora
-            // Esta verificación se omite si el estado es 'cancelada'
             if ($estado !== 'cancelada') {
                 $reservaActual = $this->reservaModel->getById($id);
 
-                // Solo verificar conflictos si se cambió la fecha/hora/trabajador
                 if ($fechaHora != $reservaActual['fecha_hora'] || $idTrabajador != $reservaActual['id_trabajador']) {
                     $disponibilidad = $this->reservaModel->verificarDisponibilidad($idTrabajador, $fechaHora, $id);
 
@@ -346,7 +303,6 @@ class TrabajadorController {
                 }
             }
 
-            // Actualizar en la base de datos
             $result = $this->reservaModel->update($id, $estado, $fechaHora, $idTrabajador);
 
             if ($result) {
@@ -360,7 +316,6 @@ class TrabajadorController {
     }
 
     public function crearReserva() {
-        // Verificar permisos - solo recepcionista puede crear reservas
         $this->checkTrabajador();
         if ($_SESSION['trabajador_rol'] !== 'recepcionista') {
             $_SESSION['error'] = 'No tienes permisos para realizar esta acción.';
@@ -368,7 +323,6 @@ class TrabajadorController {
             return;
         }
 
-        // Validar datos del formulario
         $idUsuario = $_POST['id_usuario'] ?? '';
         $idServicio = $_POST['id_servicio'] ?? '';
         $idTrabajador = $_POST['id_trabajador'] ?? '';
@@ -382,12 +336,9 @@ class TrabajadorController {
             return;
         }
 
-        // Crear la fecha y hora en formato MySQL
         $fechaHora = $fecha . ' ' . $hora . ':00';
 
-        // Verificar disponibilidad del trabajador
         if ($estado !== 'cancelada') {
-            // Obtener instancia del modelo Reserva para usar getDisponibilidad
             $disponibilidad = $this->reservaModel->getDisponibilidad($idServicio, $fecha);
             $trabajadorDisponible = false;
             $horaDisponible = false;
@@ -395,7 +346,6 @@ class TrabajadorController {
             foreach ($disponibilidad as $disp) {
                 if ($disp['id_trabajador'] == $idTrabajador) {
                     $trabajadorDisponible = true;
-                    // Verificar si la hora solicitada está en las disponibles
                     if (in_array($hora, $disp['horas_disponibles'])) {
                         $horaDisponible = true;
                     }
@@ -416,11 +366,9 @@ class TrabajadorController {
             }
         }
 
-        // Crear la reserva
         $resultado = $this->reservaModel->create($idUsuario, $idServicio, $idTrabajador, $fechaHora);
 
         if ($resultado) {
-            // Si se desea un estado diferente a pendiente, actualizar después de crear
             if ($estado !== 'pendiente') {
                 $db = Database::getInstance()->getConnection();
                 $reservaId = $db->lastInsertId();
@@ -434,37 +382,30 @@ class TrabajadorController {
         Helper::redirect('trabajador/reservas');
     }
 
-    // Add this method to your TrabajadorController class
 
     public function listarServicios() {
-        // Verify user is a worker
         $this->checkTrabajador();
 
-        // Only receptionists should access this view
         if ($_SESSION['trabajador_rol'] !== 'recepcionista') {
             $_SESSION['error'] = 'No tienes permisos para acceder a esta sección.';
             Helper::redirect('trabajador/dashboard');
             return;
         }
 
-        // Load the service model
         require_once BASE_PATH . '/app/models/Servicio.php';
         require_once BASE_PATH . '/app/models/Valoracion.php';
 
         $servicioModel = new Servicio();
         $valoracionModel = new Valoracion();
 
-        // Get all services with their ratings
         $servicios = $servicioModel->getAll();
 
-        // For each service, get its average rating
         foreach ($servicios as $key => $servicio) {
             $puntuacion = $valoracionModel->getPuntuacionMedia($servicio['id']);
             $servicios[$key]['puntuacion_media'] = $puntuacion['media'] ? round($puntuacion['media'], 1) : 0;
             $servicios[$key]['total_valoraciones'] = $puntuacion['total'];
         }
 
-        // Load the view
         ob_start();
         include BASE_PATH . '/app/views/trabajadores/servicios_recepcionista.php';
         $content = ob_get_clean();

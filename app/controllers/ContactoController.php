@@ -8,7 +8,6 @@ class ContactoController {
     }
 
     public function enviar() {
-        // Validar los datos del formulario
         $nombre = $_POST['nombre'] ?? '';
         $email = $_POST['email'] ?? '';
         $asunto = $_POST['asunto'] ?? '';
@@ -20,7 +19,6 @@ class ContactoController {
             return;
         }
 
-        // Guardar el mensaje en la base de datos
         if ($this->mensajeModel->guardar([
             'nombre' => $nombre,
             'email' => $email,

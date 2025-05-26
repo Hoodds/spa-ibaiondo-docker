@@ -124,7 +124,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Reserva -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="verReserva<?= $reserva['id'] ?>">
@@ -158,7 +157,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Editar Reserva -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="editarReserva<?= $reserva['id'] ?>">
@@ -230,7 +228,6 @@
     </div>
 </div>
 
-<!-- Modal Nueva Reserva -->
 <div class="modal fade" id="nuevaReservaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -299,7 +296,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestión de despliegues para que solo se muestre uno a la vez
     const toggleButtons = document.querySelectorAll('.toggle-collapse');
     const collapseElements = document.querySelectorAll('.collapse');
 
@@ -307,9 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const target = this.getAttribute('data-bs-target');
 
-            // Cerrar todos los elementos desplegados excepto el actual
             collapseElements.forEach(collapse => {
-                // Si no es el elemento seleccionado y está abierto, cerrarlo
                 if ('#' + collapse.id !== target && collapse.classList.contains('show')) {
                     const bsCollapse = bootstrap.Collapse.getInstance(collapse);
                     if (bsCollapse) {
@@ -320,11 +314,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Establecer fecha mínima como hoy para nuevas reservas
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('nuevaFecha').min = hoy;
 
-    // Validación del formulario de nueva reserva
     const formNuevaReserva = document.getElementById('formNuevaReserva');
     if (formNuevaReserva) {
         formNuevaReserva.addEventListener('submit', function(e) {
@@ -341,22 +333,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Solución específica para el modal de nueva reserva
     const nuevaFechaModal = document.getElementById('nuevaFecha');
     const nuevoServicioModal = document.getElementById('nuevoServicio');
     const nuevoTrabajadorModal = document.getElementById('nuevoTrabajador');
     const nuevaHoraModal = document.getElementById('nuevaHora');
 
-    // Cuando se abre el modal, resetear los campos
     const nuevaReservaModal = document.getElementById('nuevaReservaModal');
     if (nuevaReservaModal) {
         nuevaReservaModal.addEventListener('show.bs.modal', function() {
-            // Reset form fields
             if (document.getElementById('formNuevaReserva')) {
                 document.getElementById('formNuevaReserva').reset();
             }
-            
-            // Reset hora dropdown
+
             if (nuevaHoraModal) {
                 nuevaHoraModal.innerHTML = '<option value="">Seleccione fecha y trabajador primero</option>';
                 nuevaHoraModal.disabled = true;
@@ -364,31 +352,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Manejar cambio de fecha y servicio en el modal
     if (nuevaFechaModal && nuevoServicioModal) {
         const actualizarDisponibilidadModal = function() {
             if (!nuevaFechaModal.value || !nuevoServicioModal.value) {
                 return;
             }
 
-            // Mostrar indicador de carga
             if (nuevaHoraModal) {
                 nuevaHoraModal.innerHTML = '<option value="">Cargando disponibilidad...</option>';
                 nuevaHoraModal.disabled = true;
             }
-            
+
             if (nuevoTrabajadorModal) {
                 nuevoTrabajadorModal.disabled = true;
                 nuevoTrabajadorModal.innerHTML = '<option value="">Cargando...</option>';
             }
 
-            // Obtener disponibilidad para esta fecha y servicio
             fetch(`${window.location.origin}/spa-ibaiondo/public/index.php/reservas/disponibilidad?id_servicio=${nuevoServicioModal.value}&fecha=${nuevaFechaModal.value}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Datos recibidos en modal:', data);
-                    
-                    // Resetear y habilitar select de trabajadores
+
                     if (nuevoTrabajadorModal) {
                         nuevoTrabajadorModal.innerHTML = '<option value="">Seleccionar trabajador</option>';
 
@@ -401,7 +385,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             return;
                         }
 
-                        // Añadir trabajadores disponibles
                         data.forEach(item => {
                             const option = document.createElement('option');
                             option.value = item.id_trabajador;
@@ -419,12 +402,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         };
 
-        // Manejar eventos de cambio
         nuevaFechaModal.addEventListener('change', actualizarDisponibilidadModal);
         nuevoServicioModal.addEventListener('change', actualizarDisponibilidadModal);
     }
 
-    // Manejar selección de trabajador en el modal
     if (nuevoTrabajadorModal) {
         nuevoTrabajadorModal.addEventListener('change', function() {
             if (!nuevaHoraModal) return;
@@ -443,7 +424,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const horasDisponibles = JSON.parse(selectedOption.dataset.horas);
                 console.log('Horas disponibles:', horasDisponibles);
 
-                // Resetear select de horas
                 nuevaHoraModal.innerHTML = '<option value="">Seleccionar hora</option>';
 
                 if (horasDisponibles.length === 0) {
@@ -452,7 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                // Añadir horas disponibles
                 horasDisponibles.forEach(hora => {
                     const option = document.createElement('option');
                     option.value = hora;
@@ -460,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     nuevaHoraModal.appendChild(option);
                 });
 
-                // Asegurarse de que el select de horas esté habilitado
                 nuevaHoraModal.disabled = false;
             } else {
                 console.error('No se encontraron horas disponibles para el trabajador seleccionado');
@@ -469,8 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-    // Resto del código existente...
 });
 </script>
 

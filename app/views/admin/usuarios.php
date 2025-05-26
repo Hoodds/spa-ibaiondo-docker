@@ -62,7 +62,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Usuario -->
                                 <tr class="collapse-row">
                                     <td colspan="5" class="p-0">
                                         <div class="collapse" id="verUsuario<?= $usuario['id'] ?>">
@@ -82,7 +81,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Editar Usuario -->
                                 <tr class="collapse-row">
                                     <td colspan="5" class="p-0">
                                         <div class="collapse" id="editarUsuario<?= $usuario['id'] ?>">
@@ -123,7 +121,6 @@
     </div>
 </div>
 
-<!-- Modal Nuevo Usuario -->
 <div class="modal fade" id="nuevoUsuarioModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

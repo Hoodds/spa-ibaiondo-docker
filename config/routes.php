@@ -1,5 +1,5 @@
 <?php
-// Rutas públicas
+// Rutas publicas
 $router->add('GET', '/', 'HomeController', 'index');
 $router->add('GET', '/servicios', 'ServicioController', 'listar');
 $router->add('GET', '/servicios/{id}', 'ServicioController', 'mostrar');

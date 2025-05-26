@@ -19,7 +19,6 @@ class AdminController {
         $this->reservaModel = new Reserva();
         $this->valoracionModel = new Valoracion();
 
-        // Verificar si es administrador
         Auth::checkAdmin();
     }
 
@@ -59,7 +58,6 @@ class AdminController {
     public function listarServicios() {
         $servicios = $this->servicioModel->getAll();
 
-        // Para cada servicio, obtener su puntuación media
         foreach ($servicios as $key => $servicio) {
             $puntuacion = $this->valoracionModel->getPuntuacionMedia($servicio['id']);
             $servicios[$key]['puntuacion_media'] = $puntuacion['media'] ? round($puntuacion['media'], 1) : 0;
@@ -210,7 +208,6 @@ class AdminController {
             return;
         }
 
-        // Comprobar si el email ya existe
         if ($this->usuarioModel->emailExists($email)) {
             $_SESSION['error'] = 'El email ya está registrado.';
             Helper::redirect('admin/usuarios');
@@ -241,7 +238,6 @@ class AdminController {
             return;
         }
 
-        // Comprobar si el email ya existe
         if ($this->trabajadorModel->emailExists($email)) {
             $_SESSION['error'] = 'El email ya está registrado.';
             Helper::redirect('admin/trabajadores');
@@ -282,7 +278,6 @@ class AdminController {
     }
 
     public function crearReserva() {
-        // Validar datos del formulario
         $idUsuario = $_POST['id_usuario'] ?? '';
         $idServicio = $_POST['id_servicio'] ?? '';
         $idTrabajador = $_POST['id_trabajador'] ?? '';
@@ -296,12 +291,9 @@ class AdminController {
             return;
         }
 
-        // Crear la fecha y hora en formato MySQL
         $fechaHora = $fecha . ' ' . $hora . ':00';
 
-        // Verificar disponibilidad del trabajador
         if ($estado !== 'cancelada') {
-            // Primero verificar que el trabajador esté disponible en general
             $disponibilidad = $this->reservaModel->getDisponibilidad($idServicio, $fecha);
             $trabajadorDisponible = false;
             $horaDisponible = false;
@@ -309,7 +301,6 @@ class AdminController {
             foreach ($disponibilidad as $disp) {
                 if ($disp['id_trabajador'] == $idTrabajador) {
                     $trabajadorDisponible = true;
-                    // Verificar si la hora solicitada esta en las disponibles
                     if (in_array($hora, $disp['horas_disponibles'])) {
                         $horaDisponible = true;
                     }
@@ -330,9 +321,7 @@ class AdminController {
             }
         }
 
-        // Crear la reserva
         if ($this->reservaModel->create($idUsuario, $idServicio, $idTrabajador, $fechaHora)) {
-            // Si la reserva se creó con estado diferente a pendiente, actualizarla
             if ($estado !== 'pendiente') {
                 $db = Database::getInstance()->getConnection();
                 $reservaId = $db->lastInsertId();

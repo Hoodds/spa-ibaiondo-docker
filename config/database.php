@@ -1,7 +1,6 @@
 <?php
-// Configuración de la base de datos
 $config = [
-    'host' => getenv('DB_HOST') ?: 'db', // 'db' es el nombre del servicio en docker-compose
+    'host' => getenv('DB_HOST') ?: 'db',
     'port' => getenv('DB_PORT') ?: '3306',
     'database' => getenv('DB_DATABASE') ?: 'spa_docker',
     'username' => getenv('DB_USERNAME') ?: 'spauser',
@@ -17,7 +16,7 @@ class Database {
     private function __construct() {
         global $config;
         $this->config = $config;
-        
+
         try {
             $this->conn = new PDO(
                 "mysql:host={$this->config['host']};port={$this->config['port']};dbname={$this->config['database']};charset={$this->config['charset']}",
@@ -42,5 +41,4 @@ class Database {
     }
 }
 
-// Devolver la configuración
 return $config;

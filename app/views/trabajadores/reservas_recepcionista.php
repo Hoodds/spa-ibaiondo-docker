@@ -1,7 +1,6 @@
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Gestión de Reservas</h1>
-        <!-- Add the Nueva Reserva button -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaReservaModal">
             <i class="fas fa-plus"></i> Nueva Reserva
         </button>
@@ -97,7 +96,6 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <!-- Botones de acción con desplegables -->
                                         <button type="button" class="btn btn-sm btn-info toggle-collapse"
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#verReserva<?= $reserva['id'] ?>"
@@ -125,7 +123,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Reserva -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="verReserva<?= $reserva['id'] ?>">
@@ -176,7 +173,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Editar Reserva -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="editarReserva<?= $reserva['id'] ?>">
@@ -248,8 +244,6 @@
     </div>
 </div>
 
-<!-- Add the Nueva Reserva modal at the end of the file -->
-<!-- Modal Nueva Reserva -->
 <div class="modal fade" id="nuevaReservaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -318,14 +312,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar el comportamiento de los desplegables
     initAdminCollapses();
 
-    // Add the form validation for the new reservation modal
     const hoy = new Date().toISOString().split('T')[0];
     document.getElementById('nuevaFecha').min = hoy;
 
-    // Validación del formulario de nueva reserva
     const formNuevaReserva = document.getElementById('formNuevaReserva');
     if (formNuevaReserva) {
         formNuevaReserva.addEventListener('submit', function(e) {

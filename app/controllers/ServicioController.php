@@ -56,10 +56,8 @@ class ServicioController {
     }
 
     public function valorar($id) {
-        // Verificar si el usuario está autenticado
         Auth::checkAuth();
 
-        // Verificar si el servicio existe
         $servicio = $this->servicioModel->getById($id);
 
         if (!$servicio) {
@@ -68,12 +66,10 @@ class ServicioController {
             return;
         }
 
-        // Procesar el formulario de valoración
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $puntuacion = isset($_POST['puntuacion']) ? (int)$_POST['puntuacion'] : 0;
             $comentario = isset($_POST['comentario']) ? trim($_POST['comentario']) : '';
 
-            // Validar datos
             if ($puntuacion < 1 || $puntuacion > 5) {
                 $_SESSION['error'] = 'La puntuación debe estar entre 1 y 5';
                 Helper::redirect('servicios/' . $id);
@@ -86,7 +82,6 @@ class ServicioController {
                 return;
             }
 
-            // Guardar la valoración
             if ($this->valoracionModel->crear(Auth::id(), $id, $puntuacion, $comentario)) {
                 $_SESSION['success'] = 'Valoración guardada correctamente';
             } else {
@@ -97,7 +92,6 @@ class ServicioController {
             return;
         }
 
-        // Si no es POST, redirigir a la página del servicio
         Helper::redirect('servicios/' . $id);
     }
 
@@ -112,10 +106,8 @@ class ServicioController {
     }
 
     public function eliminarValoracion($id) {
-        // Verificar si el usuario está autenticado
         Auth::checkAuth();
 
-        // Obtener la valoración
         $stmt = Database::getInstance()->getConnection()->prepare("
             SELECT * FROM valoraciones WHERE id = ?
         ");
@@ -128,7 +120,6 @@ class ServicioController {
             return;
         }
 
-        // Eliminar la valoración
         if ($this->valoracionModel->eliminar($id)) {
             $_SESSION['success'] = 'Valoración eliminada correctamente';
         } else {
@@ -146,14 +137,12 @@ class ServicioController {
             $duracion = $_POST['duracion'];
             $precio = $_POST['precio'];
 
-            // Validar los datos
             if (empty($id) || empty($nombre) || empty($descripcion) || empty($duracion) || empty($precio)) {
                 $_SESSION['error'] = 'Todos los campos son obligatorios.';
                 Helper::redirect('/admin/servicios');
                 return;
             }
 
-            // Actualizar en la base de datos
             $servicioModel = new Servicio();
             $result = $servicioModel->update($id, $nombre, $descripcion, $duracion, $precio);
 

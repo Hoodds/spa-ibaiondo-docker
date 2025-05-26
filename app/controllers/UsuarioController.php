@@ -21,7 +21,6 @@ class UsuarioController {
     }
 
     public function login() {
-        // Validar datos del formulario
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -30,7 +29,6 @@ class UsuarioController {
             Helper::redirect('login');
         }
 
-        // Intentar login
         $user = $this->usuarioModel->login($email, $password);
 
         if ($user) {
@@ -53,7 +51,6 @@ class UsuarioController {
     }
 
     public function registro() {
-        // Validar datos del formulario
         $nombre = $_POST['nombre'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -69,13 +66,11 @@ class UsuarioController {
             Helper::redirect('registro');
         }
 
-        // Verificar si el email ya existe
         if ($this->usuarioModel->emailExists($email)) {
             $_SESSION['error'] = 'El email ya está registrado';
             Helper::redirect('registro');
         }
 
-        // Registrar usuario
         if ($this->usuarioModel->register($nombre, $email, $password)) {
             $_SESSION['success'] = 'Registro exitoso. Ahora puedes iniciar sesión';
             Helper::redirect('login');
@@ -95,7 +90,6 @@ class UsuarioController {
             $password = $_POST['password'] ?? '';
             $password_confirm = $_POST['password_confirm'] ?? '';
 
-            // Validaciones básicas
             if (empty($nombre) || empty($email)) {
                 $_SESSION['error'] = 'Nombre y email son obligatorios.';
                 Helper::redirect('perfil');
@@ -105,7 +99,6 @@ class UsuarioController {
                 Helper::redirect('perfil');
             }
 
-            // Cuando el usuario edita su perfil
             if (!empty($_POST['password'])) {
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             } else {
@@ -137,7 +130,7 @@ class UsuarioController {
         Auth::logout();
         session_start();
         $_SESSION['success'] = 'Has cerrado sesión correctamente.';
-        Helper::redirect('login'); // Redirige a la pantalla de login
+        Helper::redirect('login');
     }
 
     public function editar() {
@@ -147,14 +140,12 @@ class UsuarioController {
             $email = $_POST['email'];
             $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_BCRYPT) : null;
 
-            // Validar los datos
             if (empty($id) || empty($nombre) || empty($email)) {
                 $_SESSION['error'] = 'Todos los campos son obligatorios.';
                 Helper::redirect('/admin/usuarios');
                 return;
             }
 
-            // Actualizar en la base de datos
             $usuarioModel = new Usuario();
             $result = $usuarioModel->update($id, $nombre, $email, $password);
 

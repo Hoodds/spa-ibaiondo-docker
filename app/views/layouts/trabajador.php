@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Trabajador - Spa Ibaiondo</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="<?= Helper::asset('css/styles.css') ?>">
 </head>
 <body class="d-flex flex-column min-vh-100 fixed-navbar-body">
-    <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="<?= Helper::url('trabajador/dashboard') ?>">
@@ -59,7 +55,6 @@
         </div>
     </nav>
 
-    <!-- Mensajes de alerta -->
     <?php if (isset($_SESSION['success'])): ?>
         <div class="container mt-3">
             <div class="alert alert-success alert-dismissible fade show">
@@ -84,7 +79,6 @@
         <?= $content ?? '' ?>
     </main>
     <?php include BASE_PATH . '/app/views/layouts/footer.php'; ?>
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= Helper::asset('js/main.js') ?>"></script>
 </body>

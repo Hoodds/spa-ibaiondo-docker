@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fechaInput.addEventListener('change', function() {
         if (this.value) {
-            // Obtener disponibilidad para esta fecha y servicio
             fetch('<?= Helper::url('reservas/disponibilidad') ?>?id_servicio=<?= $servicio['id'] ?>&fecha=' + this.value)
                 .then(response => response.json())
                 .then(data => {
@@ -80,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         return;
                     }
 
-                    // Limpiar y habilitar select de trabajadores
                     trabajadorSelect.innerHTML = '<option value="">Selecciona un profesional</option>';
 
                     if (data.length === 0) {
@@ -91,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         return;
                     }
 
-                    // Añadir trabajadores disponibles
                     data.forEach(item => {
                         const option = document.createElement('option');
                         option.value = item.id_trabajador;
@@ -117,14 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     trabajadorSelect.addEventListener('change', function() {
         if (this.value) {
-            // Obtener horas disponibles para este trabajador
             const selectedOption = this.options[this.selectedIndex];
             const horasDisponibles = JSON.parse(selectedOption.dataset.horas);
 
-            // Limpiar y habilitar select de horas
             horaSelect.innerHTML = '<option value="">Selecciona una hora</option>';
 
-            // Añadir horas disponibles
             horasDisponibles.forEach(hora => {
                 const option = document.createElement('option');
                 option.value = hora;

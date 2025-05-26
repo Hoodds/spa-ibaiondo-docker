@@ -29,14 +29,12 @@ class Trabajador {
         $trabajador = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($trabajador) {
-            // Si la contraseña almacenada parece un hash, usar password_verify
             if (strlen($trabajador['contrasena']) > 30) {
                 if (password_verify($password, $trabajador['contrasena'])) {
                     unset($trabajador['contrasena']);
                     return $trabajador;
                 }
             } else {
-                // Comparación directa para contraseñas antiguas en texto plano
                 if ($password === $trabajador['contrasena']) {
                     unset($trabajador['contrasena']);
                     return $trabajador;

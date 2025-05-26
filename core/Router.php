@@ -15,35 +15,29 @@ class Router {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Eliminar la base de la URL si existe
         $baseFolder = '/spa-ibaiondo/public';
         if (strpos($uri, $baseFolder) === 0) {
             $uri = substr($uri, strlen($baseFolder));
         }
 
-        // Eliminar index.php de la URI si existe
         $uri = str_replace('/index.php', '', $uri);
 
-        // Eliminar parámetros de consulta
         $uri = explode('?', $uri)[0];
 
-        // Si la URI está vacía, establecerla como '/'
         if (empty($uri)) {
             $uri = '/';
         }
 
 
         foreach ($this->routes as $route) {
-            // Convertir ruta con parámetros a expresión regular
             $pattern = $this->convertRouteToRegex($route['path']);
 
             if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
-                array_shift($matches); // Eliminar la coincidencia completa
+                array_shift($matches);
 
                 $controller = $route['controller'];
                 $action = $route['action'];
 
-                // Cargar el controlador
                 $controllerFile = BASE_PATH . '/app/controllers/' . $controller . '.php';
 
                 if (!file_exists($controllerFile)) {
@@ -60,7 +54,6 @@ class Router {
                     return;
                 }
 
-                // Instanciar el controlador y llamar a la acción con los parámetros
                 $controllerInstance = new $controller();
 
                 if (!method_exists($controllerInstance, $action)) {
@@ -79,7 +72,6 @@ class Router {
     }
 
     private function convertRouteToRegex($route) {
-        // Convertir parámetros como {id} a expresiones regulares
         $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route);
         return '#^' . $pattern . '$#';
     }

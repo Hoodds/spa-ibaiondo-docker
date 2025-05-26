@@ -16,7 +16,7 @@ require_once BASE_PATH . '/core/Router.php';
 require_once BASE_PATH . '/core/Auth.php';
 require_once BASE_PATH . '/core/Helper.php';
 
-// Iniciar sesión (MOVIDO AQUÍ, DESPUÉS DE CARGAR app.php)
+// Iniciar sesion (MOVIDO AQUI, DESPUES DE CARGAR app.php)
 session_start();
 
 // Inicializar el router

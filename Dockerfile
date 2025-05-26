@@ -14,7 +14,7 @@ RUN a2enmod rewrite
 # Copiar los archivos de la aplicación
 COPY . /var/www/html/
 
-# Copiar configuración de Apache
+# Copiar configuracion de Apache
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Configurar directorio de trabajo

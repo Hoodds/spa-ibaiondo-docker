@@ -152,7 +152,6 @@
                     <h5 class="card-title mb-0">Reservas Recientes</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Aquí se podría mostrar un listado de las reservas más recientes -->
                     <p class="text-center text-muted">Próximamente: Gráfico de reservas por día/semana</p>
                 </div>
             </div>

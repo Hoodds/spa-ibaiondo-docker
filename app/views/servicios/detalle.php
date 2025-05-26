@@ -29,7 +29,6 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- Puntuación media -->
                     <div class="mb-4">
                         <div class="d-flex align-items-center">
                             <div class="me-2">
@@ -76,7 +75,6 @@
                 </div>
             </div>
 
-            <!-- Sección de valoraciones -->
             <div class="card shadow-sm mt-4">
                 <div class="card-header bg-white">
                     <h4 class="card-title mb-0">Valoraciones</h4>
@@ -84,7 +82,6 @@
                 <div class="card-body">
                     <?php if (Auth::check()): ?>
                         <?php if (!$usuarioHaValorado): ?>
-                            <!-- Formulario para añadir valoración -->
                             <form action="<?= Helper::url('servicios/' . $servicio['id'] . '/valorar') ?>" method="post" class="mb-4">
                                 <h5>Deja tu valoración</h5>
                                 <div class="mb-3">
@@ -120,7 +117,6 @@
                                 <button type="submit" class="btn btn-primary">Enviar Valoración</button>
                             </form>
                         <?php else: ?>
-                            <!-- Mostrar la valoración del usuario -->
                             <div class="alert alert-info mb-4">
                                 <h5>Tu valoración</h5>
                                 <div class="d-flex align-items-center mb-2">
@@ -151,7 +147,6 @@
                         </div>
                     <?php endif; ?>
 
-                    <!-- Listado de valoraciones -->
                     <?php if (empty($valoraciones)): ?>
                         <p class="text-center">No hay valoraciones para este servicio.</p>
                     <?php else: ?>
@@ -185,46 +180,41 @@
 </div>
 
 <script>
-// Script para la funcionalidad de las estrellas en el formulario de valoración
 document.addEventListener('DOMContentLoaded', function() {
     const starLabels = document.querySelectorAll('.star-rating .form-check-label');
     const starInputs = document.querySelectorAll('.star-rating input[type="radio"]');
 
-    // Función para actualizar las estrellas
     function updateStars(rating) {
         starLabels.forEach((label, index) => {
             if (index < rating) {
-                label.innerHTML = '<i class="fas fa-star text-warning"></i>'; // Estrella llena
+                label.innerHTML = '<i class="fas fa-star text-warning"></i>';
             } else {
-                label.innerHTML = '<i class="far fa-star text-warning"></i>'; // Estrella vacía
+                label.innerHTML = '<i class="far fa-star text-warning"></i>';
             }
         });
     }
 
-    // Evento para cuando se selecciona una estrella
     starInputs.forEach((input) => {
         input.addEventListener('change', function() {
-            updateStars(parseInt(this.value)); // Actualizar las estrellas según el valor seleccionado
+            updateStars(parseInt(this.value));
         });
     });
 
-    // Evento para cuando se pasa el ratón por encima
     starLabels.forEach((label, index) => {
         label.addEventListener('mouseenter', function() {
-            updateStars(index + 1); // Actualizar las estrellas al pasar el ratón
+            updateStars(index + 1);
         });
 
         label.addEventListener('mouseleave', function() {
             const selectedRating = document.querySelector('.star-rating input[type="radio"]:checked');
             if (selectedRating) {
-                updateStars(parseInt(selectedRating.value)); // Restaurar las estrellas según la selección actual
+                updateStars(parseInt(selectedRating.value));
             } else {
-                updateStars(0); // Si no hay selección, mostrar todas las estrellas vacías
+                updateStars(0);
             }
         });
     });
 
-    // Inicializar las estrellas según la selección actual al cargar la página
     const selectedRating = document.querySelector('.star-rating input[type="radio"]:checked');
     if (selectedRating) {
         updateStars(parseInt(selectedRating.value));

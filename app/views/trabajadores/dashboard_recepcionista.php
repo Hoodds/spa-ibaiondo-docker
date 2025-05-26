@@ -91,7 +91,6 @@
                             </thead>
                             <tbody>
                                 <?php
-                                // Filtrar reservas pendientes y ordenar por fecha
                                 $proximasReservas = array_filter($reservas, function($r) {
                                     return $r['estado'] === 'pendiente' && strtotime($r['fecha_hora']) > time();
                                 });
@@ -135,11 +134,10 @@
                 </div>
                 <div class="card-body">
                     <?php
-                    // Ordenar valoraciones por fecha y mostrar las 2 más recientes (en lugar de 5)
                     usort($valoraciones, function($a, $b) {
                         return strtotime($b['fecha_creacion']) - strtotime($a['fecha_creacion']);
                     });
-                    $valoracionesRecientes = array_slice($valoraciones, 0, 2); // Cambiamos 5 por 2
+                    $valoracionesRecientes = array_slice($valoraciones, 0, 2);
                     ?>
 
                     <?php if (empty($valoracionesRecientes)): ?>

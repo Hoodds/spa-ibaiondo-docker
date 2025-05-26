@@ -23,14 +23,12 @@ class Usuario {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Si la contraseña almacenada parece un hash, usar password_verify
             if (strlen($user['contrasena']) > 30) {
                 if (password_verify($password, $user['contrasena'])) {
                     unset($user['contrasena']);
                     return $user;
                 }
             } else {
-                // Comparación directa para contraseñas antiguas en texto plano
                 if ($password === $user['contrasena']) {
                     unset($user['contrasena']);
                     return $user;
@@ -41,7 +39,6 @@ class Usuario {
     }
 
     public function register($nombre, $email, $password) {
-        // Hashear la contraseña antes de guardarla
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->db->prepare("INSERT INTO usuarios (nombre, email, contrasena, fecha_registro) VALUES (?, ?, ?, NOW())");

@@ -23,10 +23,8 @@ class ReservaController {
     }
 
     public function showCrear($idServicio) {
-        // Verificar si el usuario está autenticado
         Auth::checkAuth();
 
-        // Obtener el servicio
         $servicio = $this->servicioModel->getById($idServicio);
 
         if (!$servicio) {
@@ -42,10 +40,8 @@ class ReservaController {
     }
 
     public function crear() {
-        // Verificar si el usuario está autenticado
         Auth::checkAuth();
 
-        // Validar datos del formulario
         $idServicio = $_POST['id_servicio'] ?? '';
         $idTrabajador = $_POST['id_trabajador'] ?? '';
         $fecha = $_POST['fecha'] ?? '';
@@ -57,10 +53,8 @@ class ReservaController {
             return;
         }
 
-        // Crear la fecha y hora en formato MySQL
         $fechaHora = $fecha . ' ' . $hora . ':00';
 
-        // Crear la reserva
         if ($this->reservaModel->create(Auth::id(), $idServicio, $idTrabajador, $fechaHora)) {
             $_SESSION['success'] = 'Reserva creada con éxito';
             Helper::redirect('reservas');
@@ -71,10 +65,8 @@ class ReservaController {
     }
 
     public function cancelar($id) {
-        // Verificar si el usuario está autenticado
         Auth::checkAuth();
 
-        // Obtener la reserva
         $reserva = $this->reservaModel->getById($id);
 
         if (!$reserva || $reserva['id_usuario'] != Auth::id()) {
@@ -83,7 +75,6 @@ class ReservaController {
             return;
         }
 
-        // Cancelar la reserva
         if ($this->reservaModel->updateEstado($id, 'cancelada')) {
             $_SESSION['success'] = 'Reserva cancelada con éxito';
         } else {
@@ -94,7 +85,6 @@ class ReservaController {
     }
 
     public function getDisponibilidad() {
-        // Esta función se puede llamar vía AJAX
         header('Content-Type: application/json');
 
         $idServicio = $_GET['id_servicio'] ?? '';
@@ -119,22 +109,17 @@ class ReservaController {
             $idServicio = $_POST['id_servicio'] ?? null;
             $idUsuario = $_POST['id_usuario'] ?? null;
 
-            // Validar los datos
             if (empty($id) || empty($estado) || empty($fecha) || empty($hora) || empty($idTrabajador)) {
                 $_SESSION['error'] = 'Todos los campos son obligatorios.';
                 Helper::redirect('/admin/reservas');
                 return;
             }
 
-            // Crear la fecha y hora en formato MySQL
             $fechaHora = $fecha . ' ' . $hora . ':00';
 
-            // Verificar disponibilidad del trabajador en esa fecha/hora
-            // Esta verificación se omite si el estado es 'cancelada'
             if ($estado !== 'cancelada') {
                 $reservaActual = $this->reservaModel->getById($id);
 
-                // Solo verificar conflictos si se cambió la fecha/hora/trabajador
                 if ($fechaHora != $reservaActual['fecha_hora'] || $idTrabajador != $reservaActual['id_trabajador']) {
                     $disponibilidad = $this->reservaModel->verificarDisponibilidad($idTrabajador, $fechaHora, $id);
 
@@ -146,7 +131,6 @@ class ReservaController {
                 }
             }
 
-            // Actualizar en la base de datos
             $result = $this->reservaModel->update($id, $estado, $fechaHora, $idTrabajador);
 
             if ($result) {

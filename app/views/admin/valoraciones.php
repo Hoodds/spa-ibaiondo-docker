@@ -70,7 +70,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Valoración -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="verValoracion<?= $valoracion['id'] ?>">

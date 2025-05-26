@@ -95,12 +95,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize collapsible elements
     const toggleButtons = document.querySelectorAll('.toggle-collapse');
 
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Close all other open collapses
             const target = this.getAttribute('data-bs-target');
             document.querySelectorAll('.collapse.show').forEach(collapse => {
                 if ('#' + collapse.id !== target) {

@@ -12,7 +12,6 @@
                     <div class="card-body">
                         <h5 class="card-title"><?= Helper::e($servicio['nombre']) ?></h5>
 
-                        <!-- Mostrar puntuación media -->
                         <div class="mb-2">
                             <div class="d-flex align-items-center">
                                 <?php for ($i = 1; $i <= 5; $i++): ?>

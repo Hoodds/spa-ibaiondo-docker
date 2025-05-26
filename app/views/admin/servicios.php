@@ -63,7 +63,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Ver Servicio -->
                                 <tr class="collapse-row">
                                     <td colspan="6" class="p-0">
                                         <div class="collapse" id="verServicio<?= $servicio['id'] ?>">
@@ -96,7 +95,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Collapse Editar Servicio -->
                                 <tr class="collapse-row">
                                     <td colspan="6" class="p-0">
                                         <div class="collapse" id="editarServicio<?= $servicio['id'] ?>">
@@ -141,7 +139,6 @@
     </div>
 </div>
 
-<!-- Modal Nuevo Servicio -->
 <div class="modal fade" id="nuevoServicioModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

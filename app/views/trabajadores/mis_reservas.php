@@ -58,7 +58,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Desplegable de detalles -->
                                 <tr class="collapse-row">
                                     <td colspan="7" class="p-0">
                                         <div class="collapse" id="verReserva<?= $reserva['id'] ?>">
@@ -116,7 +115,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar el comportamiento de los desplegables
     initAdminCollapses();
 });
 </script>

@@ -8,10 +8,8 @@ class HomeController {
     }
 
     public function index() {
-        // Obtener servicios destacados para mostrar en la página principal
         $serviciosDestacados = $this->servicioModel->getAll();
 
-        // Cargar la vista
         ob_start();
         include BASE_PATH . '/app/views/home/home.php';
         $content = ob_get_clean();
@@ -19,7 +17,6 @@ class HomeController {
     }
 
     public function contacto() {
-        // Cargar la vista de contacto
         ob_start();
         include BASE_PATH . '/app/views/home/contacto.php';
         $content = ob_get_clean();

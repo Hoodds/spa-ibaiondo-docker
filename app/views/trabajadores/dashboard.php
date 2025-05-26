@@ -25,7 +25,7 @@
                                     <?php
                                     $count = 0;
                                     foreach ($reservas as $reserva):
-                                        if ($count >= 5) break; // Mostrar solo las 5 primeras
+                                        if ($count >= 5) break;
                                         $count++;
                                     ?>
                                         <tr>
@@ -69,7 +69,7 @@
                             <?php
                             $count = 0;
                             foreach ($valoraciones as $valoracion):
-                                if ($count >= 5) break; // Mostrar solo las 5 primeras
+                                if ($count >= 5) break;
                                 $count++;
                             ?>
                                 <div class="card mb-3">
